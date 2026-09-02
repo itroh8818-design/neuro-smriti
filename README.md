@@ -175,3 +175,4 @@ This project was developed for the Smart India Hackathon. All rights reserved.
 
 *Built with ❤️ for the elderly of North East India*
 # smriti-dash
+# smriti
