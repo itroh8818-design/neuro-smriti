@@ -30,3 +30,6 @@ coverage/
 # Editor
 .vscode/
 .idea/
+
+# Local tooling
+.freebuff/

@@ -1,4 +1,4 @@
-# 🧠 NER CogniCare
+# 🧠 NER NeuroSmriti
 
 **AI-Based Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients in North Eastern Region (NER)**
 
@@ -8,7 +8,7 @@
 
 ## 🌟 Overview
 
-NER CogniCare is an AI-powered cognitive gaming and memory assistance platform designed specifically for elderly dementia patients in India's North Eastern Region. It addresses the critical gap in accessible, culturally-inclusive digital therapeutic solutions for cognitive health.
+NER NeuroSmriti is an AI-powered cognitive gaming and memory assistance platform designed specifically for elderly dementia patients in India's North Eastern Region. It addresses the critical gap in accessible, culturally-inclusive digital therapeutic solutions for cognitive health.
 
 ### Key Features
 
