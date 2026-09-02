@@ -177,3 +177,4 @@ This project was developed for the Smart India Hackathon. All rights reserved.
 # smriti-dash
 # smriti
 # smriti
+# neuro-smriti
