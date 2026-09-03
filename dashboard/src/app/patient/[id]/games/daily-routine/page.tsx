@@ -12,6 +12,7 @@ import {
   updateGameStats,
   getGameStats,
 } from "@/lib/game-utils";
+import { useLanguage } from "@/lib/language-context";
 
 const ROUTINES = [
   {
@@ -84,6 +85,7 @@ export default function DailyRoutinePage() {
 
   const [difficulty, setDifficulty] = useState(0);
   const [level, setLevel] = useState(1);
+  const { t } = useLanguage();
   const [routineIdx, setRoutineIdx] = useState(0);
   const [items, setItems] = useState(() => shuffle(ROUTINES[0].activities.slice(0, 3)));
   const [score, setScore] = useState(0);

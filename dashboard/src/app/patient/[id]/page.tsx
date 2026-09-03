@@ -54,65 +54,65 @@ const GAME_ROUTES: Record<string, string> = {
 };
 
 const REMINDERS = [
-  { id: 1, title: "Take Medication", time: "8:00 AM", icon: "💊", type: "medication", recurring: true },
-  { id: 2, title: "Morning Walk", time: "7:30 AM", icon: "🚶", type: "activity", recurring: true },
-  { id: 3, title: "Drink Water", time: "Every 2 hours", icon: "💧", type: "health", recurring: true },
-  { id: 4, title: "Brain Training Game", time: "10:00 AM", icon: "🧠", type: "activity", recurring: true },
-  { id: 5, title: "Evening Medication", time: "6:00 PM", icon: "💊", type: "medication", recurring: true },
-  { id: 6, title: "Doctor Appointment", time: "Tomorrow, 11:00 AM", icon: "🏥", type: "appointment", recurring: false },
+  { id: 1, titleKey: "takeMedication", time: "8:00 AM", icon: "💊", recurring: true },
+  { id: 2, titleKey: "morningWalk", time: "7:30 AM", icon: "🚶", recurring: true },
+  { id: 3, titleKey: "drinkWater", timeKey: "every2Hours", icon: "💧", recurring: true },
+  { id: 4, titleKey: "brainTrainingGame", time: "10:00 AM", icon: "🧠", recurring: true },
+  { id: 5, titleKey: "eveningMedication", time: "6:00 PM", icon: "💊", recurring: true },
+  { id: 6, titleKey: "doctorAppointment", timeKey: "tomorrow11am", icon: "🏥", recurring: false },
 ];
 
 const GAMES = [
   {
     id: "memory_match",
-    name: "Memory Match",
+    nameKey: "memoryMatch",
+    descKey: "memoryMatchDesc",
     icon: "🃏",
-    description: "Match pairs of cards to boost memory",
     color: "from-green-400 to-emerald-500",
   },
   {
     id: "pattern_recognition",
-    name: "Pattern Recall",
+    nameKey: "patternRecall",
+    descKey: "patternRecallDesc",
     icon: "🎯",
-    description: "Remember and recreate patterns",
     color: "from-blue-400 to-cyan-500",
   },
   {
     id: "daily_routine",
-    name: "Daily Routine",
+    nameKey: "dailyRoutine",
+    descKey: "dailyRoutineDesc",
     icon: "📋",
-    description: "Practice daily task sequences",
     color: "from-purple-400 to-pink-500",
   },
   {
     id: "object_recognition",
-    name: "Object ID",
+    nameKey: "objectId",
+    descKey: "objectIdDesc",
     icon: "🔍",
-    description: "Identify everyday objects quickly",
     color: "from-orange-400 to-red-500",
   },
   {
     id: "attention_focus",
-    name: "Focus Test",
+    nameKey: "focusTest",
+    descKey: "focusTestDesc",
     icon: "🧩",
-    description: "Sharpen your concentration skills",
     color: "from-pink-400 to-rose-500",
   },
   {
     id: "emotional_engagement",
-    name: "Emotion Match",
+    nameKey: "emotionMatch",
+    descKey: "emotionMatchDesc",
     icon: "😊",
-    description: "Recognize and match emotions",
     color: "from-yellow-400 to-amber-500",
   },
 ];
 
 const ACTIVITIES = [
-  { id: 1, name: "Morning Meditation", time: "7:00 AM", icon: "🧘", completed: true },
-  { id: 2, name: "Light Exercise", time: "8:00 AM", icon: "🚶", completed: true },
-  { id: 3, name: "Brain Training", time: "10:00 AM", icon: "🧠", completed: false },
-  { id: 4, name: "Music Therapy", time: "2:00 PM", icon: "🎵", completed: false },
-  { id: 5, name: "Evening Walk", time: "5:00 PM", icon: "🌅", completed: false },
+  { id: 1, nameKey: "morningMeditation", time: "7:00 AM", icon: "🧘", completed: true },
+  { id: 2, nameKey: "lightExercise", time: "8:00 AM", icon: "🚶", completed: true },
+  { id: 3, nameKey: "brainTraining", time: "10:00 AM", icon: "🧠", completed: false },
+  { id: 4, nameKey: "musicTherapy", time: "2:00 PM", icon: "🎵", completed: false },
+  { id: 5, nameKey: "eveningWalk", time: "5:00 PM", icon: "🌅", completed: false },
 ];
 
 export default function PatientDashboard() {
@@ -161,7 +161,7 @@ export default function PatientDashboard() {
             <div className="flex items-center gap-2 bg-orange-100 px-3 py-1.5 rounded-full">
               <Flame className="h-4 w-4 text-orange-500" />
               <span className="font-bold text-orange-600">{patient.streak}</span>
-              <span className="text-xs text-orange-500">day streak</span>
+              <span className="text-xs text-orange-500">{t("dayStreak")}</span>
             </div>
           </div>
         </div>
@@ -214,9 +214,9 @@ export default function PatientDashboard() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
                 <Gamepad2 className="h-5 w-5 text-purple-500" />
-                Your Games
+                {t("yourGames")}
               </h2>
-              <Badge className="bg-purple-100 text-purple-600">6 Available</Badge>
+              <Badge className="bg-purple-100 text-purple-600">6 {t("available")}</Badge>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
@@ -235,7 +235,7 @@ export default function PatientDashboard() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-semibold text-gray-800">{game.name}</h3>
+                          <h3 className="font-semibold text-gray-800">{t(game.nameKey)}</h3>
                           {gameStats && (
                             <Badge className={`text-xs ${DIFFICULTY_LEVELS[Math.min((gameStats[game.id as keyof AllGameStats]?.currentLevel || 1) - 1, 4)].color}`}>
                               <Star className="h-3 w-3 mr-0.5" />
@@ -243,7 +243,7 @@ export default function PatientDashboard() {
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">{game.description}</p>
+                        <p className="text-xs text-gray-500 mt-1">{t(game.descKey)}</p>
                         {gameStats ? (
                           <div>
                             <div className="flex items-center justify-between mt-3">
@@ -258,7 +258,7 @@ export default function PatientDashboard() {
                             <Progress value={getAccuracy(gameStats[game.id as keyof AllGameStats])} className="mt-2 h-1.5" />
                           </div>
                         ) : (
-                          <p className="text-xs text-gray-400 mt-3">Tap to play!</p>
+                          <p className="text-xs text-gray-400 mt-3">{t("playGames")}</p>
                         )}
                       </div>
                     </div>
@@ -278,7 +278,7 @@ export default function PatientDashboard() {
                 }}
               >
                 <Gamepad2 className="mr-2 h-5 w-5" />
-                Play {GAMES.find(g => g.id === selectedGame)?.name}
+                {t("play")} {selectedGame && GAMES.find(g => g.id === selectedGame) ? t(GAMES.find(g => g.id === selectedGame)!.nameKey) : ""}
               </Button>
             )}
           </div>
@@ -290,7 +290,7 @@ export default function PatientDashboard() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <ClipboardList className="h-4 w-4 text-green-500" />
-                  Today&apos;s Activities
+                  {t("todayActivities")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -304,7 +304,7 @@ export default function PatientDashboard() {
                     <span className="text-xl">{activity.icon}</span>
                     <div className="flex-1">
                       <p className={`text-sm font-medium ${activity.completed ? "text-green-700" : "text-gray-700"}`}>
-                        {activity.name}
+                        {t(activity.nameKey)}
                       </p>
                       <p className="text-xs text-gray-400">{activity.time}</p>
                     </div>
@@ -323,7 +323,7 @@ export default function PatientDashboard() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <BellRing className="h-4 w-4 text-blue-500" />
-                  Reminders
+                  {t("reminders")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -335,16 +335,16 @@ export default function PatientDashboard() {
                     <span className="text-xl flex-shrink-0">{reminder.icon}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-800 truncate">
-                        {reminder.title}
+                        {t(reminder.titleKey)}
                       </p>
                       <div className="flex items-center gap-1.5">
                         <Clock className="h-3 w-3 text-gray-400" />
-                        <p className="text-xs text-gray-500 truncate">{reminder.time}</p>
+                        <p className="text-xs text-gray-500 truncate">{reminder.timeKey ? t(reminder.timeKey) : reminder.time}</p>
                       </div>
                     </div>
                     {reminder.recurring && (
                       <Badge variant="outline" className="text-[10px] flex-shrink-0 border-blue-200 text-blue-500">
-                        Daily
+                        {t("daily")}
                       </Badge>
                     )}
                   </div>
@@ -357,13 +357,13 @@ export default function PatientDashboard() {
               <CardContent className="p-5">
                 <div className="text-center">
                   <div className="text-4xl mb-3">🌟</div>
-                  <h3 className="font-bold text-gray-800 mb-2">Daily Motivation</h3>
+                  <h3 className="font-bold text-gray-800 mb-2">{t("dailyMotivation")}</h3>
                   <p className="text-sm text-gray-600 italic">
-                    &ldquo;Every game you play makes your mind stronger. Keep going!&rdquo;
+                    &ldquo;{t("motivationQuote")}&rdquo;
                   </p>
                   <div className="mt-4 flex items-center justify-center gap-2">
                     <Heart className="h-4 w-4 text-red-400" />
-                    <span className="text-xs text-gray-500">From your caretaker</span>
+                    <span className="text-xs text-gray-500">{t("fromCaretaker")}</span>
                   </div>
                 </div>
               </CardContent>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { LanguageProvider } from "@/lib/language-context";
+import { AppLoader } from "./loading-provider";
 
 const atkinson = Atkinson_Hyperlegible({
   subsets: ["latin"],
@@ -29,7 +30,7 @@ export default function RootLayout({
     <html lang="en" className={cn("font-sans antialiased", atkinson.variable)}>
       <body className="min-h-screen bg-background text-foreground">
         <LanguageProvider>
-          {children}
+          <AppLoader>{children}</AppLoader>
           <Toaster richColors position="top-right" />
         </LanguageProvider>
       </body>

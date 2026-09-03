@@ -12,6 +12,7 @@ import {
   updateGameStats,
   getGameStats,
 } from "@/lib/game-utils";
+import { useLanguage } from "@/lib/language-context";
 
 const COLORS = [
   "bg-red-400",
@@ -37,6 +38,7 @@ export default function PatternRecallPage() {
 
   const [difficulty, setDifficulty] = useState(0);
   const [level, setLevel] = useState(1);
+  const { t } = useLanguage();
   const [pattern, setPattern] = useState<number[]>([]);
   const [playerInput, setPlayerInput] = useState<number[]>([]);
   const [showPattern, setShowPattern] = useState(true);
@@ -225,7 +227,7 @@ export default function PatternRecallPage() {
             <CardContent className="p-3 text-center">
               <Trophy className="h-5 w-5 mx-auto text-yellow-500 mb-1" />
               <p className="text-lg font-bold text-gray-800">{score}</p>
-              <p className="text-xs text-gray-500">Score</p>
+              <p className="text-xs text-gray-500">{t("score")}</p>
             </CardContent>
           </Card>
           <Card className="border-0 shadow-sm">

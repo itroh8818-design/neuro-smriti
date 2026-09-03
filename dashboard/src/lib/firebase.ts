@@ -1,45 +1,72 @@
 /**
  * Firebase Configuration for Caregiver Dashboard
+ * Firebase is lazily initialized — only when valid env vars are present.
+ * Mock data functions work without Firebase.
  */
-import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-};
-
-// Initialize Firebase (only on client side)
 let app: any = null;
 let db: any = null;
 let auth: any = null;
+let firebaseReady = false;
 
-if (typeof window !== 'undefined') {
-  if (getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApps()[0];
+function ensureFirebase() {
+  if (firebaseReady) return;
+  if (typeof window === 'undefined') return;
+
+  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  // Don't initialize with placeholder / missing values
+  if (!apiKey || apiKey === 'your_api_key') {
+    console.warn('[NeuroSmriti] Firebase env vars not configured — running in demo mode.');
+    firebaseReady = true;
+    return;
   }
-  db = getFirestore(app);
-  auth = getAuth(app);
+
+  try {
+    // Dynamic imports so the page never crashes even if firebase SDK has issues
+    const { initializeApp, getApps } = require('firebase/app');
+    const { getFirestore } = require('firebase/firestore');
+    const { getAuth } = require('firebase/auth');
+
+    const firebaseConfig = {
+      apiKey,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    };
+
+    if (getApps().length === 0) {
+      app = initializeApp(firebaseConfig);
+    } else {
+      app = getApps()[0];
+    }
+    db = getFirestore(app);
+    auth = getAuth(app);
+  } catch (err) {
+    console.warn('[NeuroSmriti] Firebase init failed — running in demo mode.', err);
+  }
+  firebaseReady = true;
 }
 
-export { app, db, auth };
+// Lazy getters — call these only when you actually need Firebase
+export function getApp() { ensureFirebase(); return app; }
+export function getDb() { ensureFirebase(); return db; }
+export function getFirebaseAuth() { ensureFirebase(); return auth; }
 
 // Auth helpers
 export const loginWithEmail = async (email: string, password: string) => {
-  if (!auth) throw new Error('Firebase not initialized');
-  return await signInWithEmailAndPassword(auth, email, password);
+  const a = getFirebaseAuth();
+  if (!a) throw new Error('Firebase not configured — demo mode');
+  const { signInWithEmailAndPassword } = require('firebase/auth');
+  return await signInWithEmailAndPassword(a, email, password);
 };
 
-export const onAuthChange = (callback: (user: User | null) => void) => {
-  if (!auth) return () => {};
-  return onAuthStateChanged(auth, callback);
+export const onAuthChange = (callback: (user: any) => void) => {
+  const a = getFirebaseAuth();
+  if (!a) return () => {};
+  const { onAuthStateChanged } = require('firebase/auth');
+  return onAuthStateChanged(a, callback);
 };
 
 // Data fetching helpers

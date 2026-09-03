@@ -14,6 +14,7 @@ import {
   getGameStats,
   type DifficultyConfig,
 } from "@/lib/game-utils";
+import { useLanguage } from "@/lib/language-context";
 
 const EMOJIS = ["🐶", "🐱", "🐸", "🐰", "🦊", "🐻", "🐼", "🐨", "🦁", "🐯", "🐮", "🐷"];
 
@@ -63,6 +64,7 @@ export default function MemoryMatchPage() {
   const [animatingCards, setAnimatingCards] = useState<Set<number>>(new Set());
   const [comboCount, setComboCount] = useState(0);
   const [showCombo, setShowCombo] = useState(false);
+  const { t } = useLanguage();
 
   const totalPairs = difficulty.pairs || 4;
 
@@ -213,8 +215,8 @@ export default function MemoryMatchPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="font-bold text-gray-800">🃏 Memory Match</h1>
-              <p className="text-xs text-gray-500">Match all the pairs!</p>
+              <h1 className="font-bold text-gray-800">🃏 {t("memoryMatch")}</h1>
+              <p className="text-xs text-gray-500">{t("matchPairs")}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -228,7 +230,7 @@ export default function MemoryMatchPage() {
             </Button>
             <Button variant="outline" size="sm" onClick={resetGame}>
               <RotateCcw className="h-4 w-4 mr-1" />
-              Restart
+              {t("restart")}
             </Button>
           </div>
         </div>
@@ -261,14 +263,14 @@ export default function MemoryMatchPage() {
             <CardContent className="p-3 text-center">
               <Clock className="h-5 w-5 mx-auto text-blue-500 mb-1" />
               <p className="text-lg font-bold text-gray-800">{formatTime(timer)}</p>
-              <p className="text-xs text-gray-500">Time</p>
+              <p className="text-xs text-gray-500">{t("time")}</p>
             </CardContent>
           </Card>
           <Card className="border-0 shadow-sm">
             <CardContent className="p-3 text-center">
               <Zap className="h-5 w-5 mx-auto text-orange-500 mb-1" />
               <p className="text-lg font-bold text-gray-800">{moves}</p>
-              <p className="text-xs text-gray-500">Moves</p>
+              <p className="text-xs text-gray-500">{t("moves")}</p>
             </CardContent>
           </Card>
           <Card className="border-0 shadow-sm">
@@ -277,7 +279,7 @@ export default function MemoryMatchPage() {
               <p className="text-lg font-bold text-gray-800">
                 {matchedCount}/{totalPairs}
               </p>
-              <p className="text-xs text-gray-500">Matched</p>
+              <p className="text-xs text-gray-500">{t("matched")}</p>
             </CardContent>
           </Card>
         </div>
@@ -296,7 +298,7 @@ export default function MemoryMatchPage() {
           <Card className="mb-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-0 animate-pulse">
             <CardContent className="p-6 text-center">
               <div className="text-5xl mb-3">🎉</div>
-              <h2 className="text-2xl font-bold mb-2">Level Up!</h2>
+              <h2 className="text-2xl font-bold mb-2">{t("levelUp")}</h2>
               <p className="text-yellow-100">
                 You&apos;ve unlocked <span className="font-bold">{DIFFICULTY_LEVELS[level]?.name}</span> difficulty!
               </p>
@@ -307,7 +309,7 @@ export default function MemoryMatchPage() {
                 }}
                 className="mt-4 bg-white text-orange-600 hover:bg-orange-50 font-bold"
               >
-                Try New Level
+                {t("continueBtn2")}
               </Button>
             </CardContent>
           </Card>
@@ -336,7 +338,7 @@ export default function MemoryMatchPage() {
                 className="mt-4 bg-white text-emerald-600 hover:bg-green-50 font-bold"
               >
                 <RotateCcw className="h-4 w-4 mr-2" />
-                Play Again
+                {t("playAgain")}
               </Button>
             </CardContent>
           </Card>

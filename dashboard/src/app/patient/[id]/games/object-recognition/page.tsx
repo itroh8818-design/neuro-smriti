@@ -12,6 +12,7 @@ import {
   updateGameStats,
   getGameStats,
 } from "@/lib/game-utils";
+import { useLanguage } from "@/lib/language-context";
 
 const OBJECT_SETS = [
   { prompt: "Which one is a fruit? 🍎", options: ["🍎", "🚗", "📱"], answer: 0 },
@@ -52,6 +53,7 @@ export default function ObjectRecognitionPage() {
 
   const [difficulty, setDifficulty] = useState(0);
   const [level, setLevel] = useState(1);
+  const { t } = useLanguage();
   const [questions, setQuestions] = useState(() => shuffle(OBJECT_SETS).slice(0, 5));
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
@@ -189,7 +191,7 @@ export default function ObjectRecognitionPage() {
             <CardContent className="p-3 text-center">
               <Trophy className="h-5 w-5 mx-auto text-yellow-500 mb-1" />
               <p className="text-lg font-bold text-gray-800">{score}/{questions.length}</p>
-              <p className="text-xs text-gray-500">Score</p>
+              <p className="text-xs text-gray-500">{t("score")}</p>
             </CardContent>
           </Card>
           <Card className="border-0 shadow-sm">

@@ -12,6 +12,7 @@ import {
   updateGameStats,
   getGameStats,
 } from "@/lib/game-utils";
+import { useLanguage } from "@/lib/language-context";
 
 const DIFFICULTY_CONFIG = [
   { name: "Easy", gridSize: 3, cellsStart: 2, cellsEnd: 3, rounds: 6 },
@@ -28,6 +29,7 @@ export default function FocusTestPage() {
 
   const [difficulty, setDifficulty] = useState(0);
   const [level, setLevel] = useState(1);
+  const { t } = useLanguage();
   const [gridSize, setGridSize] = useState(3);
   const [highlightCells, setHighlightCells] = useState<number[]>([]);
   const [playerCells, setPlayerCells] = useState<number[]>([]);
@@ -225,7 +227,7 @@ export default function FocusTestPage() {
             <CardContent className="p-3 text-center">
               <Trophy className="h-5 w-5 mx-auto text-yellow-500 mb-1" />
               <p className="text-lg font-bold text-gray-800">{score}</p>
-              <p className="text-xs text-gray-500">Score</p>
+              <p className="text-xs text-gray-500">{t("score")}</p>
             </CardContent>
           </Card>
         </div>

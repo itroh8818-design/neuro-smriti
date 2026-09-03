@@ -6,8 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Shield, Heart, Gamepad2, Sparkles, Globe, Check } from "lucide-react";
+import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
 import { useLanguage } from "@/lib/language-context";
 import { LANGUAGES, Language } from "@/lib/translations";
 
@@ -42,6 +42,18 @@ export default function LoginPage() {
     setLoading(true);
     setTimeout(() => router.push(`/patient/${patientId}`), 500);
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-teal-50 via-emerald-50 to-cyan-50">
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl overflow-hidden shadow-xl">
+          <img src="/logo-icon.jpeg" alt="NeuroSmriti" className="w-full h-full object-cover" />
+        </div>
+        <LoadingIndicator type="dot-circle" size="lg" label={t("signingIn")} />
+        <h1 className="mt-6 text-2xl font-bold text-teal-700">{t("appName")}</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-50 via-emerald-50 to-cyan-50 p-4">
@@ -108,29 +120,38 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {/* Login Card with Tabs */}
+            {/* Login Card with simple tabs */}
             <Card className="border-0 shadow-2xl overflow-hidden">
               <CardContent className="p-0">
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 h-14 rounded-none bg-gray-50">
-                    <TabsTrigger 
-                      value="caretaker" 
-                      className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-teal-600 font-semibold"
-                    >
-                      <Shield className="h-4 w-4 mr-2" />
-                      {t("caretakerPortal")}
-                    </TabsTrigger>
-                    <TabsTrigger 
-                      value="patient" 
-                      className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-teal-600 font-semibold"
-                    >
-                      <Heart className="h-4 w-4 mr-2" />
-                      {t("patientPortal")}
-                    </TabsTrigger>
-                  </TabsList>
+                {/* Tab Headers */}
+                <div className="grid w-full grid-cols-2 h-14 bg-gray-50">
+                  <button
+                    onClick={() => setActiveTab("caretaker")}
+                    className={`flex items-center justify-center font-semibold transition-all ${
+                      activeTab === "caretaker"
+                        ? "bg-white shadow-sm text-teal-600"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    {t("caretakerPortal")}
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("patient")}
+                    className={`flex items-center justify-center font-semibold transition-all ${
+                      activeTab === "patient"
+                        ? "bg-white shadow-sm text-teal-600"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <Heart className="h-4 w-4 mr-2" />
+                    {t("patientPortal")}
+                  </button>
+                </div>
 
-                  {/* Caretaker Login */}
-                  <TabsContent value="caretaker" className="p-6 mt-0">
+                {/* Caretaker Login */}
+                {activeTab === "caretaker" && (
+                  <div className="p-6">
                     <div className="space-y-4">
                       <div className="text-center mb-4">
                         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 mb-3">
@@ -196,10 +217,12 @@ export default function LoginPage() {
                         {t("demoHint")}
                       </p>
                     </div>
-                  </TabsContent>
+                  </div>
+                )}
 
-                  {/* Patient Login */}
-                  <TabsContent value="patient" className="p-6 mt-0">
+                {/* Patient Login */}
+                {activeTab === "patient" && (
+                  <div className="p-6">
                     <div className="space-y-4">
                       <div className="text-center mb-4">
                         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 mb-3">
@@ -239,8 +262,8 @@ export default function LoginPage() {
                         {t("selectProfile")}
                       </p>
                     </div>
-                  </TabsContent>
-                </Tabs>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </>
